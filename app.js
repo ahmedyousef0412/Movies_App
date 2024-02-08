@@ -40,20 +40,15 @@ app.get('/api/genres/:id',(req,res)=>{
 //Create a new Genre
 app.post('/api/genres',(req,res)=>{
 
-const schema  = Joi.object({
-
-    name: Joi.string().required().min(5),
-});
-
 let newGenre = {
     id: genres.length + 1,
     name: req.body.name
 };
 
-const result = schema.validate(req.body);
+let {error} = validateGenres(req.body);
 
-if(result.error){
-    const errors = result.error.details.map(e =>e.message);
+if(error){
+    const errors = error.details.map(e =>e.message);
    return res.status(400).json(errors)
 }
 
@@ -66,7 +61,6 @@ res.send(newGenre);
 
 //Update Genre
 app.put('/api/genres/:id',(req,res)=>{
-
 
     let id = parseInt(req.params.id);
 
