@@ -17,11 +17,3 @@ const port = process.env.PORT || 3000;
 app.listen(port,()=>{console.log(`Listen to port ${port}`);});
 
 
-function validateGenres(genre){
-    let schema = Joi.object(
-        {
-            name: Joi.string().min(5).required()
-        }
-    );
-    return schema.validate(genre, { abortEarly: false })
-}
