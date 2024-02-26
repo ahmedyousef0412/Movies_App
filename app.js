@@ -1,11 +1,20 @@
+const mongoose = require('mongoose');
 
-const Joi = require('joi');
-const courses = require('./routes/genres');
+const genres = require('./routes/genres');
+const customers = require('./routes/customers');
 const express = require('express');
+
+
+const mongoUrl = "mongodb://localhost/Movies";
+
+mongoose.connect(mongoUrl)
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error(' Could not connect to MongoDB...', err));
 
 const app = express();
 app.use(express.json());
-app.use('/api/courses',courses);
+app.use('/api/genres',genres);
+app.use('/api/customers',customers);
 
 
 
