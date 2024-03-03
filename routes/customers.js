@@ -1,5 +1,7 @@
 
 const {Customer,validate} = require('../models/customer');
+const auth = require('../middlewares/auth');
+const isAdmin = require('../middlewares/admin');
 
 const express = require("express");
 const router = express.Router();
@@ -26,7 +28,7 @@ router.get('/:id', async (req, res) => {
 
 //Create Customer
 
-router.post('/', async (req, res) => {
+router.post('/', auth,async (req, res) => {
 
     let { error } =validate(req.body);
 
@@ -35,19 +37,19 @@ router.post('/', async (req, res) => {
         return res.status(400).send(errors);
     }
 
-    let customer = new Customer({
+    const customer = new Customer({
         name: req.body.name,
         isGold: req.body.isGold,
         phone: req.body.phone
     });
-    customer = await customer.save();
+    await customer.save();
     res.send(customer);
 });
 
 
 //Update Customer
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth,async (req, res) => {
     let { error } = validate(req.body);
 
     if (error) {
@@ -69,7 +71,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //Delete Customer
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',[auth,isAdmin],async(req,res)=>{
 
     try {
         
